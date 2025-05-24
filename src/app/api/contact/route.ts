@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ message: 'Message sent successfully' }, { status: 200 });
   } catch (err: any) {
-    console.error('Server error in API route:', err); // Log the actual error object
+    console.error('Server error in API route:', err);
     return NextResponse.json({ error: 'Server error' }, { status: 500 });
   }
 }

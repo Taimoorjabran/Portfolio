@@ -1,13 +1,13 @@
 'use client';
 
-import React from 'react'; // React is implicitly used, but good to import explicitly
-import Image from 'next/image'; // Assuming you might want to add avatars later
+import React from 'react';
+import Image from 'next/image';
 
 type User = {
   _id: string;
   email: string;
-  name?: string; // Added optional name for display
-  avatarUrl?: string; // Added optional avatarUrl for display
+  name?: string;
+  avatarUrl?: string;
 };
 
 export default function Connections({ users }: { users: User[] }) {
@@ -44,7 +44,6 @@ export default function Connections({ users }: { users: User[] }) {
                 </p>
                 <p className="text-sm text-gray-500">{user.email}</p>
               </div>
-              {/* Optional: Add an icon or button for actions like "View Profile" */}
               <button
                 className="ml-auto p-2 rounded-full text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 title="View Profile"
