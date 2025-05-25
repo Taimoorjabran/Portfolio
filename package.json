@@ -5,7 +5,7 @@
   "scripts": {
     "lint": "next lint",
     "dev": "ts-node server.ts",
-    "build": "next build && tsc server.ts",
+    "build": "next build && tsc --noEmit",
     "start": "NODE_ENV=production node server.js"
   },
   "dependencies": {
@@ -23,9 +23,10 @@
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^5.9.2",
     "mongoose": "^8.14.1",
-    "next": "15.3.1",
+    "next": "^14.1.0",
+    "react": "^18.2.0",
+    "typescript": "^5.3.0",
     "next-auth": "^4.24.11",
-    "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.56.1",
     "react-simple-typewriter": "^5.0.1",
@@ -35,7 +36,6 @@
     "postcss": "^8.5.3",
     "tailwindcss": "^3.4.17",
     "autoprefixer": "^10.4.21",
-    "typescript": "^5.0.0",
     "zod": "^3.24.3"
   },
   "devDependencies": {
