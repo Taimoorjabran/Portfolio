@@ -4,9 +4,9 @@
   "private": true,
   "scripts": {
     "lint": "next lint",
-    "dev": "ts-node server.ts",
+    "dev": "next dev",
     "build": "next build && tsc --noEmit",
-    "start": "NODE_ENV=production node server.js"
+    "start": "next start"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
