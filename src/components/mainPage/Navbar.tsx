@@ -2,6 +2,7 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faMoon, faSun, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { redirect } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 interface NavbarProps {
   isMenuOpen: boolean;
@@ -12,6 +13,8 @@ interface NavbarProps {
 }
 
 const Navbar: React.FC<NavbarProps> = ({ isMenuOpen, toggleMenu, toggleTheme, isDarkMode, scrollToSection }) => {
+  const router = useRouter();
+
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white shadow-md">
       <div className="container mx-auto px-6 py-4">
@@ -25,7 +28,7 @@ const Navbar: React.FC<NavbarProps> = ({ isMenuOpen, toggleMenu, toggleTheme, is
             <button onClick={() => scrollToSection('skills')} className="text-gray-700 hover:text-blue-600 transition-colors duration-300 cursor-pointer whitespace-nowrap">Skills</button>
             <button onClick={() => scrollToSection('experience')} className="text-gray-700 hover:text-blue-600 transition-colors duration-300 cursor-pointer whitespace-nowrap">Experience</button>
             <button onClick={() => scrollToSection('contact')} className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-300 !rounded-button cursor-pointer whitespace-nowrap">Contact Me</button>
-            <button onClick={() => redirect('/user/login')} className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-300 !rounded-button cursor-pointer whitespace-nowrap">Login</button>
+            <button onClick={() => router.push('/user/login')} className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-300 !rounded-button cursor-pointer whitespace-nowrap">Login</button>
             {/* <button onClick={toggleTheme} className="text-gray-700 hover:text-blue-600 transition-colors duration-300 cursor-pointer">
               <FontAwesomeIcon
                 icon={isDarkMode ? faSun : faMoon}
