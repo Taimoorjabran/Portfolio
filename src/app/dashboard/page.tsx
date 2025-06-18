@@ -70,21 +70,21 @@ export default async function DashboardPage() {
           : new Date(doc.timestamp).toISOString(),
     }));
   } else {
-    const admin = await User.findOne({ role: 'admin' }).lean<IUser>();
-    if (admin) {
-      users = [
-        {
-          email: admin.email,
-          name: admin.name,
-          avatarUrl: admin.avatarUrl,
-          _id: admin._id.toString(),
-        },
-      ];
+    const adminList = await User.find({ role: 'admin' }).lean<IUser[]>();
+    if (adminList) {
+      users = adminList.map((u) => ({
+        email: u.email,
+        name: u.name,
+        avatarUrl: u.avatarUrl,
+        _id: u._id.toString(),
+      }));
+      
+      const emails = adminList.map((u) => u.email);
 
       const rawChats = await Chat.find({
         $or: [
-          { sender: currentUserEmail, recipient: admin.email },
-          { sender: admin.email, recipient: currentUserEmail },
+          { sender: currentUserEmail, recipient: { $in: emails } },
+          { sender: { $in: emails }, recipient: currentUserEmail },
         ],
       })
         .sort({ timestamp: -1 })

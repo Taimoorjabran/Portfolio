@@ -47,13 +47,9 @@ export default function ChatBox({ currentUser, initialChatWith, users }: ChatBox
 
     const msgPayload = { sender: currentUser, recipient: chatWith, message };
     socket.emit('send_message', msgPayload);
-    // Optimistic update: Add message to local state immediately
-    // The server will broadcast it back, but we add it here to avoid flicker.
-    // If your backend assigns a unique ID, you might want to wait for the
-    // 'receive_message' event and check for duplicates by ID.
     setMessages((prev) => [...prev, { ...msgPayload, timestamp: new Date().toISOString() }]);
     setMessage('');
-    scrollToBottom(); // Scroll after sending
+    scrollToBottom();
   }, [message, currentUser, chatWith]);
 
   const handleTyping = useCallback(() => {
@@ -72,11 +68,11 @@ export default function ChatBox({ currentUser, initialChatWith, users }: ChatBox
 
   useEffect(() => {
     if (!socket) {
-      socket = io({
+      socket = io(process.env.NEXT_PUBLIC_NEXTAUTH_URL, {
         path: '/api/socket',
         query: { email: currentUser },
       });
-
+     
       socket.on('connect', () => {
         console.log('Connected to socket:', socket?.id);
       });

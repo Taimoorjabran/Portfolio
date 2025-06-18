@@ -25,13 +25,13 @@ app.prepare().then(() => {
     },
   });
 
-  const onlineUsers = new Map<string, string>(); // email -> socket.id
+  const onlineUsers = new Map<string, string>();
 
   io.on('connection', (socket: Socket) => {
     const email = socket.handshake.query.email as string;
 
     if (email) {
-      console.log(`✅ ${email} connected with socket ID: ${socket.id}`);
+      console.log(`${email} connected with socket ID: ${socket.id}`);
       onlineUsers.set(email, socket.id);
       io.emit('online_users', Array.from(onlineUsers.keys()));
     }
