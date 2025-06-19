@@ -16,14 +16,15 @@ interface Message {
 
 interface User {
   email: string;
+  role?: string;
   name?: string;
   avatarUrl?: string;
   online?: boolean;
-  _id?: string;
+  _id: string;
 }
 
 interface ChatBoxProps {
-  currentUser: string;
+  currentUser: User | null;
   initialChatWith?: string;
   users: User[];
 }
@@ -45,15 +46,15 @@ export default function ChatBox({ currentUser, initialChatWith, users }: ChatBox
   const sendMessage = useCallback(() => {
     if (!socket || !message.trim()) return;
 
-    const msgPayload = { sender: currentUser, recipient: chatWith, message };
+    const msgPayload = { sender: currentUser?.email, recipient: chatWith, message };
     socket.emit('send_message', msgPayload);
     setMessage('');
     scrollToBottom();
-  }, [message, currentUser, chatWith]);
+  }, [message, currentUser?.email, chatWith]);
 
   const handleTyping = useCallback(() => {
     if (socket) {
-      socket.emit('typing', { sender: currentUser, recipient: chatWith });
+      socket.emit('typing', { sender: currentUser?.email, recipient: chatWith });
 
       if (typingTimeoutRef.current) {
         clearTimeout(typingTimeoutRef.current);
@@ -62,16 +63,16 @@ export default function ChatBox({ currentUser, initialChatWith, users }: ChatBox
         setTypingUser(null);
       }, 2500);
     }
-  }, [currentUser, chatWith]);
+  }, [currentUser?.email, chatWith]);
 
 
   useEffect(() => {
     if (!socket) {
       socket = io(process.env.NEXT_PUBLIC_NEXTAUTH_URL, {
         path: '/api/socket',
-        query: { email: currentUser },
+        query: { email: currentUser?.email },
       });
-     
+
       socket.on('connect', () => {
         console.log('Connected to socket:', socket?.id);
       });
@@ -83,8 +84,8 @@ export default function ChatBox({ currentUser, initialChatWith, users }: ChatBox
           }
 
           if (
-            (msg.sender === currentUser && msg.recipient === chatWith) ||
-            (msg.sender === chatWith && msg.recipient === currentUser)
+            (msg.sender === currentUser?.email && msg.recipient === chatWith) ||
+            (msg.sender === chatWith && msg.recipient === currentUser?.email)
           ) {
             return [...prevMessages, msg];
           }
@@ -123,12 +124,12 @@ export default function ChatBox({ currentUser, initialChatWith, users }: ChatBox
         clearTimeout(typingTimeoutRef.current);
       }
     };
-  }, [currentUser, chatWith]);
+  }, [currentUser?.email, chatWith]);
 
   useEffect(() => {
     const fetchMessages = async () => {
       try {
-        const res = await fetch(`/api/messages?userEmail=${currentUser}&otherEmail=${chatWith}`);
+        const res = await fetch(`/api/messages?userEmail=${currentUser?.email}&otherEmail=${chatWith}`);
         if (!res.ok) {
           throw new Error(`Error fetching messages: ${res.statusText}`);
         }
@@ -141,7 +142,7 @@ export default function ChatBox({ currentUser, initialChatWith, users }: ChatBox
       }
     };
     fetchMessages();
-  }, [chatWith, currentUser]);
+  }, [chatWith, currentUser?.email]);
 
   useEffect(() => {
     scrollToBottom();
@@ -150,11 +151,11 @@ export default function ChatBox({ currentUser, initialChatWith, users }: ChatBox
 
   const enrichedUsers = users.map((user) => ({
     ...user,
-    online: onlineUsers.includes(user.email),
+    online: onlineUsers.includes(user?.email),
   }));
 
   const selectedUser = enrichedUsers.find(u => u.email === chatWith);
-  const chatWithDisplayName = selectedUser?.name || selectedUser?.email;
+  const chatWithDisplayName = currentUser?.role === 'user' ? 'Taimoor Jabran' : (selectedUser?.name || selectedUser?.email);
 
   return (
     <div className="flex flex-col max-h-[380px] bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200">
@@ -181,18 +182,26 @@ export default function ChatBox({ currentUser, initialChatWith, users }: ChatBox
           </div>
         </div>
         <div className="relative">
-          <select
-            value={chatWith}
-            onChange={(e) => setChatWith(e.target.value)}
-            className="appearance-none bg-blue-700 text-white py-2 pl-4 pr-10 rounded-full cursor-pointer hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-colors"
-            style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='white'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 0.75rem center', backgroundSize: '1.5em 1.5em' }}
-          >
-            {enrichedUsers.map((user) => (
-              <option key={user._id || user.email} value={user.email} className="bg-white text-gray-900">
-                {user.name || user.email} {user.online ? '🟢' : '⚪'}
-              </option>
-            ))}
-          </select>
+          {(currentUser?.role === 'admin') ?
+            (<select
+              value={chatWith}
+              onChange={(e) => setChatWith(e.target.value)}
+              className="appearance-none bg-blue-700 text-white py-2 pl-4 pr-10 rounded-full cursor-pointer hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-colors"
+              style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='white'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 0.75rem center', backgroundSize: '1.5em 1.5em' }}
+            >
+              {enrichedUsers.map((user) => (
+                <option key={user._id || user.email} value={user.email} className="bg-white text-gray-900">
+                  {user.name || user.email} {user.online ? '🟢' : '⚪'}
+                </option>
+              ))}
+            </select>)
+            :
+            (<div className="appearance-none bg-blue-700 text-white py-2 pl-4 pr-10 rounded-full cursor-pointer hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-colors">
+              {enrichedUsers.map((user) => (
+                <p>{user.name || user.email} {user.online ? '🟢' : '⚪'}</p>
+              ))}
+            </div>
+            )}
         </div>
       </div>
 
@@ -204,7 +213,7 @@ export default function ChatBox({ currentUser, initialChatWith, users }: ChatBox
             </div>
           )}
           {messages.map((msg, idx) => {
-            const isSentByCurrentUser = msg.sender === currentUser;
+            const isSentByCurrentUser = msg.sender === currentUser?.email;
             const displaySenderName = isSentByCurrentUser ? 'You' : (enrichedUsers.find(u => u.email === msg.sender)?.name || msg.sender);
             return (
               <div
@@ -212,11 +221,10 @@ export default function ChatBox({ currentUser, initialChatWith, users }: ChatBox
                 className={`flex ${isSentByCurrentUser ? 'justify-end' : 'justify-start'}`}
               >
                 <div
-                  className={`max-w-[70%] p-3 rounded-lg shadow-md ${
-                    isSentByCurrentUser
+                  className={`max-w-[70%] p-3 rounded-lg shadow-md ${isSentByCurrentUser
                       ? 'bg-blue-500 text-white rounded-br-none'
                       : 'bg-gray-200 text-gray-800 rounded-bl-none'
-                  }`}
+                    }`}
                 >
                   <strong className="block text-xs font-semibold mb-1">
                     {displaySenderName}

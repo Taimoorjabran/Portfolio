@@ -5,7 +5,7 @@ import { ReactNode, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faBars, faTimes, faChartBar, faSignOutAlt } from '@fortawesome/free-solid-svg-icons'; // Using faChartBar for logo, faSignOutAlt for sign out
+import { faHome, faBars, faTimes, faChartBar, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();

@@ -19,15 +19,16 @@ export default function ChatList({ recruiterChats, userChats, role }: ChatListPr
   const [activeTab, setActiveTab] = useState<'recruiters' | 'users'>(isAdmin ? 'recruiters' : 'users');
 
   const messages = activeTab === 'recruiters' ? recruiterChats : userChats;
+  const userText = isAdmin ? 'Recent' : 'Your';
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-xl border border-gray-100 max-h-[350px] flex flex-col">
       <h2 className="text-2xl font-bold text-gray-800 mb-6 border-b pb-3">
-        Recent <span className="text-blue-600">Messages</span>
+        {userText} <span className="text-blue-600">Messages List</span>
       </h2>
 
-      <div className="flex space-x-3 mb-6 p-1 bg-gray-100 rounded-lg shadow-inner">
-        {isAdmin && (
+      {isAdmin && (
+        <div className="flex space-x-3 mb-6 p-1 bg-gray-100 rounded-lg shadow-inner">
           <button
             onClick={() => setActiveTab('recruiters')}
             className={`flex-1 py-3 px-4 rounded-md text-base font-semibold transition-all duration-300 ease-in-out
@@ -38,18 +39,18 @@ export default function ChatList({ recruiterChats, userChats, role }: ChatListPr
           >
             Recruiter Messages
           </button>
-        )}
-        <button
-          onClick={() => setActiveTab('users')}
-          className={`flex-1 py-3 px-4 rounded-md text-base font-semibold transition-all duration-300 ease-in-out
-            ${activeTab === 'users'
-              ? 'bg-green-600 text-white shadow-md'
-              : 'text-gray-700 hover:bg-gray-200'
-            }`}
-        >
-          User Messages
-        </button>
-      </div>
+          <button
+            onClick={() => setActiveTab('users')}
+            className={`flex-1 py-3 px-4 rounded-md text-base font-semibold transition-all duration-300 ease-in-out
+             ${activeTab === 'users'
+                ? 'bg-green-600 text-white shadow-md'
+                : 'text-gray-700 hover:bg-gray-200'
+              }`}
+          >
+            User Messages
+          </button>
+        </div>
+      )}
 
       <div className="flex-1 space-y-4 bg-gray-50 p-4 rounded-lg border border-gray-200 overflow-y-auto custom-scrollbar">
         {messages.length === 0 ? (
