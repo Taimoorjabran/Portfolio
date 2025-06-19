@@ -196,7 +196,7 @@ export default function ChatBox({ currentUser, initialChatWith, users }: ChatBox
               ))}
             </select>)
             :
-            (<div className="appearance-none bg-blue-700 text-white py-2 pl-4 pr-10 rounded-full cursor-pointer hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-colors">
+            (<div className="appearance-none bg-blue-700 text-white py-2 pl-4 pr-10 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-400 transition-colors">
               {enrichedUsers.map((user) => (
                 <p>{user.name || user.email} {user.online ? '🟢' : '⚪'}</p>
               ))}
@@ -222,13 +222,16 @@ export default function ChatBox({ currentUser, initialChatWith, users }: ChatBox
               >
                 <div
                   className={`max-w-[70%] p-3 rounded-lg shadow-md ${isSentByCurrentUser
-                      ? 'bg-blue-500 text-white rounded-br-none'
-                      : 'bg-gray-200 text-gray-800 rounded-bl-none'
+                    ? 'bg-blue-500 text-white rounded-br-none'
+                    : 'bg-gray-200 text-gray-800 rounded-bl-none'
                     }`}
                 >
-                  <strong className="block text-xs font-semibold mb-1">
-                    {displaySenderName}
-                  </strong>
+                  {
+                    currentUser?.role === 'admin' && (
+                      <strong className="block text-xs font-semibold mb-1">
+                        {displaySenderName}
+                      </strong>
+                    )}
                   <p className="text-sm break-words">{msg.message}</p>
                   <span className={`block text-xs mt-1 ${isSentByCurrentUser ? 'text-blue-100' : 'text-gray-500'}`}>
                     {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}

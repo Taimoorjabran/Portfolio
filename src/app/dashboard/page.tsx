@@ -119,20 +119,20 @@ export default async function DashboardPage() {
             <h2 className="text-2xl font-bold text-gray-800">
               Welcome, <span className="text-blue-600">{currentUser?.name || currentUser?.email}</span>!
             </h2>
-            <p className="text-gray-600 text-md mt-1">Your role: <span className="font-semibold capitalize">{currentUser?.role}</span></p>
+            <p className="text-gray-600 text-sm mt-1 ml-1">{currentUser?.role === 'admin' ? 'Welcome Taimoor chat will users' : 'Now you can chat with Taimoor directly!'}</p>
           </div>
           {currentUser?.role === 'admin' ? <Connections users={users} />
             : (
               <div className="bg-white p-6 rounded-lg shadow-md border border-gray-100 mb-6">
-                <h2 className="text-2xl font-bold text-gray-800">👋 Welcome to My Portfolio</h2>
-                <p className="text-gray-600 text-sm mt-2 leading-relaxed">
+                <h2 className="text-2xl font-bold text-gray-800">Welcome to My Portfolio</h2>
+                <p className="text-gray-600 text-sm mt-3 leading-relaxed">
                   You’re invited to connect directly with <span className="font-semibold text-blue-600">Taimoor Jabran</span>
                 </p>
-                <ul className="list-disc list-inside text-gray-600 mt-3 space-y-1 text-sm">
-                  <li>💬 Have a project idea? Need a developer? Or just exploring? Let’s talk!</li>
-                  <li>🤝 Open to collaboration, feedback, or freelance opportunities.</li>
-                  <li>🔧 Tech Stack: <span className="font-medium text-gray-700">React, Next.js, TypeScript, Node.js</span></li>
-                  <li>✅ 100% response rate — your message matters!</li>
+                <ul className="list-disc list-inside text-gray-600 mt-2 space-y-1 text-sm">
+                  <li>Have a project idea? Need a developer? Or just exploring? Let’s talk!</li>
+                  <li>Open to collaboration, feedback, or freelance opportunities.</li>
+                  <li>Tech Stack: <span className="font-medium text-gray-700">React, Next.js, TypeScript, Node.js</span></li>
+                  <li>100% response rate — your message matters!</li>
                 </ul>
               </div>
             )}

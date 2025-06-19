@@ -22,8 +22,8 @@ export default function ChatList({ recruiterChats, userChats, role }: ChatListPr
   const userText = isAdmin ? 'Recent' : 'Your';
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-xl border border-gray-100 max-h-[350px] flex flex-col">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6 border-b pb-3">
+    <div className="bg-white p-6 rounded-lg shadow-md border border-gray-100 max-h-[348px] flex flex-col">
+      <h2 className="text-2xl font-bold text-gray-800 mb-6 border-b pb-1">
         {userText} <span className="text-blue-600">Messages List</span>
       </h2>
 
@@ -64,9 +64,11 @@ export default function ChatList({ recruiterChats, userChats, role }: ChatListPr
               className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200"
             >
               <div className="flex justify-between items-start mb-1">
+                {isAdmin && (
                 <p className="text-base font-semibold text-gray-800">
                   {chat.sender}
                 </p>
+              )}
                 <p className="text-xs text-gray-500">
                   {format(new Date(chat.timestamp), 'dd/MM/yyyy')} at {format(new Date(chat.timestamp), 'HH:mm')}
                 </p>
