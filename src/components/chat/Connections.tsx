@@ -12,7 +12,7 @@ type User = {
 
 export default function Connections({ users }: { users: User[] }) {
   return (
-    <div className="bg-white p-6 mb-4 rounded-lg shadow-xl border border-gray-100 max-h-[220px] overflow-y-auto custom-scrollbar">
+    <div className="bg-white p-6 mb-4 rounded-lg shadow-md border border-gray-100 max-h-[218px] overflow-y-auto custom-scrollbar">
       <h2 className="text-2xl font-bold text-gray-800 mb-6 border-b pb-3">
         Your <span className="text-blue-600">Connections</span>
       </h2>

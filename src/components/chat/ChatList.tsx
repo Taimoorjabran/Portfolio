@@ -23,7 +23,7 @@ export default function ChatList({ recruiterChats, userChats, role }: ChatListPr
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-md border border-gray-100 max-h-[348px] flex flex-col">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6 border-b pb-1">
+      <h2 className="text-2xl font-bold text-gray-800 mb-6 border-b pb-3">
         {userText} <span className="text-blue-600">Messages List</span>
       </h2>
 
@@ -52,7 +52,7 @@ export default function ChatList({ recruiterChats, userChats, role }: ChatListPr
         </div>
       )}
 
-      <div className="flex-1 space-y-4 bg-gray-50 p-4 rounded-lg border border-gray-200 overflow-y-auto custom-scrollbar">
+      <div className="flex-1 space-y-4 bg-gray-50 pb-4 pt-2 rounded-lg border border-gray-200 overflow-y-auto custom-scrollbar">
         {messages.length === 0 ? (
           <div className="flex items-center justify-center h-full">
             <p className="text-lg text-gray-500 italic">No messages found for this category.</p>
@@ -61,7 +61,7 @@ export default function ChatList({ recruiterChats, userChats, role }: ChatListPr
           messages.map((chat, idx) => (
             <div
               key={idx}
-              className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200"
+              className="bg-white p-4 mx-3 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200"
             >
               <div className="flex justify-between items-start mb-1">
                 {isAdmin && (
