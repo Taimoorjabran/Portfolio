@@ -78,7 +78,7 @@ export default async function DashboardPage() {
         avatarUrl: u.avatarUrl,
         _id: u._id.toString(),
       }));
-      
+
       const emails = adminList.map((u) => u.email);
 
       const rawChats = await Chat.find({
@@ -103,7 +103,12 @@ export default async function DashboardPage() {
     }
   }
 
-  const chatWithEmail = users.length > 0 ? users[0].email : currentUserEmail;
+  const lastChatExists = users.find(u => u.email === currentUser?.lastChattedWith);
+  const chatWithEmail = lastChatExists
+    ? currentUser?.lastChattedWith
+    : users.length > 0
+      ? users[0].email
+      : currentUserEmail;
 
   return (
     <DashboardLayout>

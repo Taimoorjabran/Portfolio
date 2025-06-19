@@ -6,6 +6,7 @@ import { Server, Socket } from 'socket.io';
 import next from 'next';
 import dbConnect from './src/lib/dbConnect';
 import Chat from './src/models/Chat';
+import User from './src/models/User';
 
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
@@ -49,6 +50,12 @@ app.prepare().then(() => {
 
         const recipientSocketId = onlineUsers.get(msg.recipient);
         const senderSocketId = onlineUsers.get(msg.sender);
+
+        await User.findOneAndUpdate(
+          { email: msg.sender },
+          { lastChattedWith: msg.recipient },
+          { upsert: true }
+        );
 
         // Send to recipient only if online
         if (recipientSocketId) {

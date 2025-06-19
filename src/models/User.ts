@@ -7,11 +7,14 @@ export interface IUser extends Document {
   role: string;
   name?: string;
   avatarUrl?: string;
+  lastChattedWith?: string,
 }
 
 const userSchema = new Schema<IUser>({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
+  lastChattedWith: String,
+  avatarUrl: String,
   role: {
     type: String,
     enum: ['admin', 'user'],

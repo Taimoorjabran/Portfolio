@@ -20,7 +20,7 @@ export async function GET(req: NextRequest) {
         { sender: otherEmail, recipient: userEmail },
       ],
     })
-      .sort({ timestamp: -1 })
+      .sort({ timestamp: 1 })
       .limit(50)
       .lean();
 

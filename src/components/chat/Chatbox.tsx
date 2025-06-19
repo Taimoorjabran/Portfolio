@@ -24,7 +24,7 @@ interface User {
 
 interface ChatBoxProps {
   currentUser: string;
-  initialChatWith: string;
+  initialChatWith?: string;
   users: User[];
 }
 
@@ -47,7 +47,6 @@ export default function ChatBox({ currentUser, initialChatWith, users }: ChatBox
 
     const msgPayload = { sender: currentUser, recipient: chatWith, message };
     socket.emit('send_message', msgPayload);
-    setMessages((prev) => [...prev, { ...msgPayload, timestamp: new Date().toISOString() }]);
     setMessage('');
     scrollToBottom();
   }, [message, currentUser, chatWith]);
